@@ -27,10 +27,12 @@ public class Cliente {
     private int porta;
     private String ip;
     private String caminhoDownload;
-    public Cliente(int porta, String ip, ClientForm formCli) {
+
+    public Cliente(int porta, String ip, ClientForm formCli, String caminho) {
         this.porta = porta;
         this.ip = ip;
         this.formCli = formCli;
+        this.caminhoDownload = caminho;
     }
 
     private void solicitarLista() {
@@ -41,7 +43,6 @@ public class Cliente {
         Socket s = null;
         DataInputStream entrada;
         try {
-            OutputStream respServ = new FileOutputStream(caminhoDownload + "in");
             //Estabelecer conex�o
             s = new Socket(ip, porta);
 
@@ -54,7 +55,8 @@ public class Cliente {
                 entrada = new DataInputStream(s.getInputStream());
                 DefaultListModel listModel = new DefaultListModel();
 
-                String[] linhas = entrada.readUTF().split("\n");
+                String readUTF = entrada.readUTF();
+                String[] linhas = readUTF.split(":");
                 for (String linha : linhas) {
                     listModel.addElement(linha);
                 }
@@ -63,17 +65,19 @@ public class Cliente {
             }
             if (mensagem.startsWith("getArquivo")) {
                 entrada = new DataInputStream(s.getInputStream());
-                OutputStream out = new FileOutputStream(caminhoDownload + formCli.jList1.getSelectedValue());
+                OutputStream out = new FileOutputStream(caminhoDownload + File.separator + formCli.jList1.getSelectedValue());
                 byte[] bytes = new byte[16 * 1024];
 
                 int count;
                 while ((count = entrada.read(bytes)) > 0) {
                     out.write(bytes, 0, count);
                 }
+                out.flush();
+                out.close();
                 JOptionPane.showMessageDialog(formCli, "Arquivo salvo no diretório Downloads");
                 
             }
-
+                
             saida.close();
             s.close();
         } catch (IOException ex) {

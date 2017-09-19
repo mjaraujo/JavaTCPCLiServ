@@ -22,7 +22,7 @@ public class ClientForm extends javax.swing.JFrame {
     public ClientForm() {
         arquivos = new ArrayList<String>();
         initComponents();
-        cliente = new Cliente(0, "", this);
+        cliente = new Cliente(0, "", this,txtCaminho.getText());
         
 
     }
@@ -79,7 +79,7 @@ public class ClientForm extends javax.swing.JFrame {
 
         jLabel4.setText("IP do servidor:");
 
-        txtIP.setText("127.0.0.1");
+        txtIP.setText("10.0.54.3");
 
         jLabel8.setText("Porta:");
 
@@ -92,7 +92,7 @@ public class ClientForm extends javax.swing.JFrame {
             }
         });
 
-        txtCaminho.setText("/home/marcio/Downloads/");
+        txtCaminho.setText("C:\\Users\\ALUNO\\Desktop\\recebidos");
         txtCaminho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCaminhoActionPerformed(evt);
@@ -198,6 +198,8 @@ public class ClientForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPortaActionPerformed
 
     private void btnSolicitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarActionPerformed
+        if(jList1.getSelectedIndex()<0)return;
+        
         cliente.setIp(txtIP.getText());
         cliente.setPorta(Integer.parseInt(txtPorta.getText()));
 //        listenServer.iniciar();
